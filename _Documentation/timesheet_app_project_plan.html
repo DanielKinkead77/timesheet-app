@@ -1,0 +1,173 @@
+
+<style>
+  .plan { padding: 1rem 0; }
+  .phase { margin-bottom: 1.5rem; border-radius: var(--border-radius-lg); border: 1px solid var(--color-border-tertiary); overflow: hidden; }
+  .phase-header { padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
+  .phase-num { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 99px; flex-shrink: 0; }
+  .phase-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); }
+  .phase-time { font-size: 12px; color: var(--color-text-secondary); margin-left: auto; }
+  .tasks { padding: 0 16px 14px; display: flex; flex-direction: column; gap: 6px; }
+  .task { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--color-text-secondary); padding: 6px 10px; border-radius: var(--border-radius-md); background: var(--color-background-secondary); }
+  .task i { margin-top: 1px; flex-shrink: 0; font-size: 14px; }
+  .task-text { flex: 1; }
+  .task-badge { font-size: 10px; font-weight: 500; padding: 1px 7px; border-radius: 99px; flex-shrink: 0; margin-top: 1px; }
+  .badge-key { background: #EEEDFE; color: #3C3489; }
+  .badge-ui  { background: #E1F5EE; color: #085041; }
+  .badge-data{ background: #FAEEDA; color: #633806; }
+  @media (prefers-color-scheme: dark) {
+    .badge-key { background: #3C3489; color: #CECBF6; }
+    .badge-ui  { background: #085041; color: #9FE1CB; }
+    .badge-data{ background: #633806; color: #FAC775; }
+  }
+  .schema-row { display: flex; gap: 12px; padding: 0 16px 14px; flex-wrap: wrap; }
+  .schema-card { flex: 1; min-width: 140px; border: 1px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); overflow: hidden; }
+  .schema-head { padding: 6px 10px; font-size: 12px; font-weight: 500; color: var(--color-text-primary); border-bottom: 1px solid var(--color-border-tertiary); }
+  .schema-field { padding: 3px 10px; font-size: 11px; color: var(--color-text-secondary); font-family: var(--font-mono); border-bottom: 1px solid var(--color-border-tertiary); display: flex; justify-content: space-between; }
+  .schema-field:last-child { border-bottom: none; }
+  .ftype { opacity: .6; }
+  .pk { color: #534AB7; font-weight: 500; }
+  .fk { color: #0F6E56; font-weight: 500; }
+  @media (prefers-color-scheme: dark) { .pk { color: #AFA9EC; } .fk { color: #5DCAA5; } }
+  h2.sr-only { position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0); }
+  .legend { display: flex; gap: 12px; padding: 0 16px 4px; flex-wrap: wrap; }
+  .leg { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--color-text-secondary); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .summary-bar { display: flex; gap: 10px; padding: 0 0 1rem; flex-wrap: wrap; }
+  .sum-card { flex: 1; min-width: 100px; border: 1px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 14px; }
+  .sum-val { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+  .sum-label { font-size: 11px; color: var(--color-text-secondary); margin-top: 1px; }
+  .phase-purple .phase-header { background: #EEEDFE; } .phase-purple .phase-num { background: #534AB7; color: #fff; }
+  .phase-teal   .phase-header { background: #E1F5EE; } .phase-teal   .phase-num { background: #0F6E56; color: #fff; }
+  .phase-amber  .phase-header { background: #FAEEDA; } .phase-amber  .phase-num { background: #854F0B; color: #fff; }
+  .phase-coral  .phase-header { background: #FAECE7; } .phase-coral  .phase-num { background: #993C1D; color: #fff; }
+  .phase-blue   .phase-header { background: #E6F1FB; } .phase-blue   .phase-num { background: #185FA5; color: #fff; }
+  @media (prefers-color-scheme: dark) {
+    .phase-purple .phase-header { background: #26215C; }
+    .phase-teal   .phase-header { background: #04342C; }
+    .phase-amber  .phase-header { background: #412402; }
+    .phase-coral  .phase-header { background: #4A1B0C; }
+    .phase-blue   .phase-header { background: #042C53; }
+  }
+</style>
+<div class="plan">
+  <h2 class="sr-only">Timesheet app project plan — 5 phases, 24-hour build</h2>
+
+  <div class="summary-bar">
+    <div class="sum-card"><div class="sum-val">5</div><div class="sum-label">Phases</div></div>
+    <div class="sum-card"><div class="sum-val">~24hrs</div><div class="sum-label">Target build time</div></div>
+    <div class="sum-card"><div class="sum-val">3</div><div class="sum-label">Database tables</div></div>
+    <div class="sum-card"><div class="sum-val">Laravel 11</div><div class="sum-label">Framework</div></div>
+  </div>
+
+  <div class="legend">
+    <div class="leg"><div class="dot" style="background:#534AB7"></div> Laravel feature</div>
+    <div class="leg"><div class="dot" style="background:#0F6E56"></div> UI / frontend</div>
+    <div class="leg"><div class="dot" style="background:#854F0B"></div> Data / database</div>
+  </div>
+
+  <!-- Phase 1 -->
+  <div class="phase phase-purple">
+    <div class="phase-header">
+      <span class="phase-num">01</span>
+      <span class="phase-title">Setup, migrations &amp; models</span>
+      <span class="phase-time">Hours 0–3</span>
+    </div>
+    <div class="schema-row">
+      <div class="schema-card">
+        <div class="schema-head">users</div>
+        <div class="schema-field"><span class="pk">id</span><span class="ftype">ulid PK</span></div>
+        <div class="schema-field"><span>name</span><span class="ftype">string</span></div>
+        <div class="schema-field"><span>email</span><span class="ftype">string unique</span></div>
+        <div class="schema-field"><span>password</span><span class="ftype">hashed</span></div>
+        <div class="schema-field"><span>timestamps</span><span class="ftype">auto</span></div>
+      </div>
+      <div class="schema-card">
+        <div class="schema-head">projects</div>
+        <div class="schema-field"><span class="pk">id</span><span class="ftype">ulid PK</span></div>
+        <div class="schema-field"><span class="fk">user_id</span><span class="ftype">FK → users</span></div>
+        <div class="schema-field"><span>name</span><span class="ftype">string</span></div>
+        <div class="schema-field"><span>description</span><span class="ftype">text nullable</span></div>
+        <div class="schema-field"><span>hourly_rate</span><span class="ftype">decimal nullable</span></div>
+        <div class="schema-field"><span>colour</span><span class="ftype">string</span></div>
+        <div class="schema-field"><span>timestamps</span><span class="ftype">auto</span></div>
+      </div>
+      <div class="schema-card">
+        <div class="schema-head">time_entries</div>
+        <div class="schema-field"><span class="pk">id</span><span class="ftype">ulid PK</span></div>
+        <div class="schema-field"><span class="fk">user_id</span><span class="ftype">FK → users</span></div>
+        <div class="schema-field"><span class="fk">project_id</span><span class="ftype">FK → projects</span></div>
+        <div class="schema-field"><span>description</span><span class="ftype">string nullable</span></div>
+        <div class="schema-field"><span>started_at</span><span class="ftype">datetime</span></div>
+        <div class="schema-field"><span>ended_at</span><span class="ftype">datetime nullable</span></div>
+        <div class="schema-field"><span>timestamps</span><span class="ftype">auto</span></div>
+      </div>
+    </div>
+    <div class="tasks">
+      <div class="task"><i class="ti ti-terminal" aria-hidden="true"></i><span class="task-text"><code>composer create-project laravel/laravel timesheet-app</code></span><span class="task-badge badge-key">Setup</span></div>
+      <div class="task"><i class="ti ti-database" aria-hidden="true"></i><span class="task-text">Configure SQLite in <code>.env</code>, run <code>php artisan migrate</code></span><span class="task-badge badge-data">DB</span></div>
+      <div class="task"><i class="ti ti-code" aria-hidden="true"></i><span class="task-text">Create <code>Project</code> and <code>TimeEntry</code> models with Eloquent relationships</span><span class="task-badge badge-key">Laravel</span></div>
+      <div class="task"><i class="ti ti-seed" aria-hidden="true"></i><span class="task-text">Create factories and a <code>DatabaseSeeder</code> with demo data</span><span class="task-badge badge-data">DB</span></div>
+    </div>
+  </div>
+
+  <!-- Phase 2 -->
+  <div class="phase phase-teal">
+    <div class="phase-header">
+      <span class="phase-num">02</span>
+      <span class="phase-title">Authentication</span>
+      <span class="phase-time">Hours 3–5</span>
+    </div>
+    <div class="tasks">
+      <div class="task"><i class="ti ti-package" aria-hidden="true"></i><span class="task-text">Install Laravel Breeze — gives you register, login, logout, and email verification out of the box</span><span class="task-badge badge-key">Laravel</span></div>
+      <div class="task"><i class="ti ti-layout" aria-hidden="true"></i><span class="task-text">Breeze scaffolds Blade views + Tailwind CSS automatically — your UI foundation is ready</span><span class="task-badge badge-ui">UI</span></div>
+      <div class="task"><i class="ti ti-shield-lock" aria-hidden="true"></i><span class="task-text">Add <code>auth</code> middleware to all project and time entry routes</span><span class="task-badge badge-key">Laravel</span></div>
+    </div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase phase-amber">
+    <div class="phase-header">
+      <span class="phase-num">03</span>
+      <span class="phase-title">Core CRUD — projects &amp; time entries</span>
+      <span class="phase-time">Hours 5–12</span>
+    </div>
+    <div class="tasks">
+      <div class="task"><i class="ti ti-route" aria-hidden="true"></i><span class="task-text">Create resourceful controllers: <code>ProjectController</code>, <code>TimeEntryController</code></span><span class="task-badge badge-key">Laravel</span></div>
+      <div class="task"><i class="ti ti-check" aria-hidden="true"></i><span class="task-text">Use Form Requests (<code>StoreProjectRequest</code> etc.) to handle all validation cleanly</span><span class="task-badge badge-key">Laravel</span></div>
+      <div class="task"><i class="ti ti-lock" aria-hidden="true"></i><span class="task-text">Add Policies so users can only edit their own projects and entries</span><span class="task-badge badge-key">Laravel</span></div>
+      <div class="task"><i class="ti ti-clock-play" aria-hidden="true"></i><span class="task-text">Add a "Start timer" button that creates an entry with <code>started_at = now()</code> and no <code>ended_at</code></span><span class="task-badge badge-ui">UI</span></div>
+      <div class="task"><i class="ti ti-clock-stop" aria-hidden="true"></i><span class="task-text">Add a "Stop timer" button that sets <code>ended_at = now()</code> and computes duration</span><span class="task-badge badge-ui">UI</span></div>
+    </div>
+  </div>
+
+  <!-- Phase 4 -->
+  <div class="phase phase-coral">
+    <div class="phase-header">
+      <span class="phase-num">04</span>
+      <span class="phase-title">UI — dashboard &amp; views</span>
+      <span class="phase-time">Hours 12–19</span>
+    </div>
+    <div class="tasks">
+      <div class="task"><i class="ti ti-layout-dashboard" aria-hidden="true"></i><span class="task-text"><strong>Dashboard</strong> — total hours this week, active timer (if running), recent entries list</span><span class="task-badge badge-ui">UI</span></div>
+      <div class="task"><i class="ti ti-folder" aria-hidden="true"></i><span class="task-text"><strong>Projects list</strong> — cards with colour indicator, total hours logged, hourly rate</span><span class="task-badge badge-ui">UI</span></div>
+      <div class="task"><i class="ti ti-file-time" aria-hidden="true"></i><span class="task-text"><strong>Timesheet view</strong> — entries grouped by day, inline edit, delete</span><span class="task-badge badge-ui">UI</span></div>
+      <div class="task"><i class="ti ti-chart-bar" aria-hidden="true"></i><span class="task-text"><strong>Reports page</strong> — hours + earnings by project, filterable by date range</span><span class="task-badge badge-ui">UI</span></div>
+      <div class="task"><i class="ti ti-palette" aria-hidden="true"></i><span class="task-text">Style with Tailwind CSS (already installed by Breeze) — keep it clean, not cluttered</span><span class="task-badge badge-ui">UI</span></div>
+    </div>
+  </div>
+
+  <!-- Phase 5 -->
+  <div class="phase phase-blue">
+    <div class="phase-header">
+      <span class="phase-num">05</span>
+      <span class="phase-title">Polish &amp; publish</span>
+      <span class="phase-time">Hours 19–24</span>
+    </div>
+    <div class="tasks">
+      <div class="task"><i class="ti ti-test-pipe" aria-hidden="true"></i><span class="task-text">Write 3–5 feature tests with Pest — auth, project creation, timer start/stop</span><span class="task-badge badge-key">Laravel</span></div>
+      <div class="task"><i class="ti ti-file-description" aria-hidden="true"></i><span class="task-text">Write a strong <code>README.md</code> — what it does, setup steps, screenshots, tech decisions</span><span class="task-badge badge-key">GitHub</span></div>
+      <div class="task"><i class="ti ti-photo" aria-hidden="true"></i><span class="task-text">Add screenshots of the dashboard, timesheet, and reports page to the README</span><span class="task-badge badge-ui">UI</span></div>
+      <div class="task"><i class="ti ti-brand-github" aria-hidden="true"></i><span class="task-text">Push to GitHub — make sure <code>.env.example</code> is committed but <code>.env</code> is in <code>.gitignore</code></span><span class="task-badge badge-key">GitHub</span></div>
+    </div>
+  </div>
+</div>

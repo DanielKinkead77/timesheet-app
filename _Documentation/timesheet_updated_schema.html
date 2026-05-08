@@ -1,0 +1,110 @@
+
+<style>
+  h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+  .schema{padding:1rem 0;display:flex;flex-direction:column;gap:16px}
+  .table-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+  .table-head{padding:10px 16px;display:flex;align-items:center;gap:10px;border-bottom:0.5px solid var(--color-border-tertiary)}
+  .table-icon{font-size:18px;color:var(--color-text-secondary)}
+  .table-name{font-size:14px;font-weight:500;color:var(--color-text-primary);font-family:var(--font-mono)}
+  .table-desc{font-size:12px;color:var(--color-text-secondary);margin-left:auto}
+  .fields{width:100%;border-collapse:collapse}
+  .fields tr{border-bottom:0.5px solid var(--color-border-tertiary)}
+  .fields tr:last-child{border-bottom:none}
+  .fields td{padding:7px 16px;font-size:12px}
+  .col-name{font-family:var(--font-mono);color:var(--color-text-primary);font-weight:500;width:160px}
+  .col-type{color:var(--color-text-secondary);width:120px}
+  .col-note{color:var(--color-text-tertiary)}
+  .badge{font-size:10px;font-weight:500;padding:1px 6px;border-radius:99px;margin-left:6px;vertical-align:middle}
+  .pk{background:#EEEDFE;color:#3C3489}
+  .fk{background:#E1F5EE;color:#085041}
+  .opt{background:#F1EFE8;color:#444441}
+  @media(prefers-color-scheme:dark){
+    .pk{background:#26215C;color:#CECBF6}
+    .fk{background:#04342C;color:#9FE1CB}
+    .opt{background:#2C2C2A;color:#D3D1C7}
+  }
+  .rel{display:flex;align-items:center;gap:8px;padding:8px 16px;font-size:11px;color:var(--color-text-secondary);border-top:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+  .rel i{font-size:14px}
+  .t-users .table-head{background:#E6F1FB}
+  .t-projects .table-head{background:#EEEDFE}
+  .t-entries .table-head{background:#E1F5EE}
+  .t-rates .table-head{background:#FAEEDA}
+  @media(prefers-color-scheme:dark){
+    .t-users .table-head{background:#042C53}
+    .t-projects .table-head{background:#26215C}
+    .t-entries .table-head{background:#04342C}
+    .t-rates .table-head{background:#412402}
+  }
+</style>
+<div class="schema">
+  <h2 class="sr-only">Updated database schema for the timesheet app — four tables</h2>
+
+  <div class="table-card t-users">
+    <div class="table-head">
+      <i class="ti ti-users table-icon" aria-hidden="true"></i>
+      <span class="table-name">users</span>
+      <span class="table-desc">Already exists — no changes needed</span>
+    </div>
+    <table class="fields">
+      <tr><td class="col-name">id<span class="badge pk">PK</span></td><td class="col-type">bigint</td><td class="col-note">Auto-incrementing unique identifier</td></tr>
+      <tr><td class="col-name">name</td><td class="col-type">string</td><td class="col-note">Full name</td></tr>
+      <tr><td class="col-name">email</td><td class="col-type">string unique</td><td class="col-note">Login email</td></tr>
+      <tr><td class="col-name">password</td><td class="col-type">string</td><td class="col-note">Hashed by Laravel automatically</td></tr>
+      <tr><td class="col-name">timestamps</td><td class="col-type">auto</td><td class="col-note">created_at and updated_at</td></tr>
+    </table>
+  </div>
+
+  <div class="table-card t-rates">
+    <div class="table-head">
+      <i class="ti ti-coin table-icon" aria-hidden="true"></i>
+      <span class="table-name">hourly_rates</span>
+      <span class="table-desc">Lookup table — seeded with default rates</span>
+    </div>
+    <table class="fields">
+      <tr><td class="col-name">id<span class="badge pk">PK</span></td><td class="col-type">bigint</td><td class="col-note">Auto-incrementing unique identifier</td></tr>
+      <tr><td class="col-name">rate_code</td><td class="col-type">string unique</td><td class="col-note">e.g. NORMAL, OVERTIME, DOUBLE_TIME</td></tr>
+      <tr><td class="col-name">description</td><td class="col-type">string</td><td class="col-note">e.g. "Normal Rate", "Overtime", "Double Time"</td></tr>
+      <tr><td class="col-name">multiplier</td><td class="col-type">decimal(3,2)</td><td class="col-note">e.g. 1.00, 1.50, 2.00 — applied to base rate</td></tr>
+      <tr><td class="col-name">timestamps</td><td class="col-type">auto</td><td class="col-note">created_at and updated_at</td></tr>
+    </table>
+  </div>
+
+  <div class="table-card t-projects">
+    <div class="table-head">
+      <i class="ti ti-folder table-icon" aria-hidden="true"></i>
+      <span class="table-name">projects</span>
+      <span class="table-desc">One user can have many projects</span>
+    </div>
+    <table class="fields">
+      <tr><td class="col-name">id<span class="badge pk">PK</span></td><td class="col-type">bigint</td><td class="col-note">Auto-incrementing unique identifier</td></tr>
+      <tr><td class="col-name">user_id<span class="badge fk">FK</span></td><td class="col-type">bigint</td><td class="col-note">Links to users.id</td></tr>
+      <tr><td class="col-name">department</td><td class="col-type">string</td><td class="col-note">e.g. "Engineering", "Design"</td></tr>
+      <tr><td class="col-name">description<span class="badge opt">optional</span></td><td class="col-type">text</td><td class="col-note">Longer notes about the project</td></tr>
+      <tr><td class="col-name">is_active</td><td class="col-type">boolean</td><td class="col-note">true = active, false = archived</td></tr>
+      <tr><td class="col-name">timestamps</td><td class="col-type">auto</td><td class="col-note">created_at and updated_at</td></tr>
+    </table>
+    <div class="rel"><i class="ti ti-arrow-up" aria-hidden="true"></i> user_id → users.id — deletes cascade</div>
+  </div>
+
+  <div class="table-card t-entries">
+    <div class="table-head">
+      <i class="ti ti-clock table-icon" aria-hidden="true"></i>
+      <span class="table-name">time_sheets</span>
+      <span class="table-desc">Core table — one entry per work session</span>
+    </div>
+    <table class="fields">
+      <tr><td class="col-name">id<span class="badge pk">PK</span></td><td class="col-type">bigint</td><td class="col-note">Auto-incrementing unique identifier</td></tr>
+      <tr><td class="col-name">user_id<span class="badge fk">FK</span></td><td class="col-type">bigint</td><td class="col-note">Links to users.id — who logged this</td></tr>
+      <tr><td class="col-name">project_id<span class="badge fk">FK</span></td><td class="col-type">bigint</td><td class="col-note">Links to projects.id — which project</td></tr>
+      <tr><td class="col-name">hourly_rate_id<span class="badge fk">FK</span></td><td class="col-type">bigint</td><td class="col-note">Links to hourly_rates.id — normal/OT/double</td></tr>
+      <tr><td class="col-name">date</td><td class="col-type">date</td><td class="col-note">The date the work was done</td></tr>
+      <tr><td class="col-name">start_time</td><td class="col-type">time</td><td class="col-note">When work started e.g. 09:00</td></tr>
+      <tr><td class="col-name">end_time<span class="badge opt">optional</span></td><td class="col-type">time</td><td class="col-note">Null means timer is still running</td></tr>
+      <tr><td class="col-name">hour_number<span class="badge opt">optional</span></td><td class="col-type">decimal(5,2)</td><td class="col-note">Calculated from start/end, or entered manually</td></tr>
+      <tr><td class="col-name">work_description<span class="badge opt">optional</span></td><td class="col-type">text</td><td class="col-note">What was worked on</td></tr>
+      <tr><td class="col-name">timestamps</td><td class="col-type">auto</td><td class="col-note">created_at and updated_at</td></tr>
+    </table>
+    <div class="rel"><i class="ti ti-arrow-up" aria-hidden="true"></i> user_id → users.id, project_id → projects.id, hourly_rate_id → hourly_rates.id</div>
+  </div>
+
+</div>
